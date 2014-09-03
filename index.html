@@ -1,1 +1,139 @@
-Hello World
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>SFMovies</title>
+      <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/ui-darkness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <label for="autocomplete">Filter by movie title: </label>
+    <input id="autocomplete">
+    <p>data from <a href="https://data.sfgov.org/Arts-Culture-and-Recreation-/Film-Locations-in-San-Francisco/yitu-d5am">data.sfgov.org</a></p>
+    
+    <div id="map-canvas"/>
+    
+    <script>
+      //Update this URL depending on where the service is hosted
+      SFMOVIES_API_ENDPOINT = "54.68.23.19/sfmovies/services/"
+    
+      $( "#autocomplete" ).autocomplete({
+        source: function( request, response ) {
+          var request = $.ajax({
+            url: SFMOVIES_API_ENDPOINT+"title_autocomplete", 
+            dataType: "jsonp",
+            data: { term: request.term },
+            success: function(data) {
+              response( data );
+            }
+          });
+          request.fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+          });
+        },
+        select: function(event, ui) {
+          updateMarkers();
+        }
+      });
+    </script>
+    <script>
+      var map, infowindow;
+      var markers = [];
+      var newMarkers = [];
+
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(37.767601, -122.426111),
+          zoom: 13
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+        infowindow = new google.maps.InfoWindow();
+        
+        google.maps.event.addListener(map, 'idle', function() {
+          // 1 second after the center of the map has changed, update markers
+          window.setTimeout(function() {
+            updateMarkers()
+          }, 1000);
+        });
+      }
+      
+      function updateMarkers() {
+        // Get new location data based on our new window position and title filter.
+        var payload = {
+          bounds: map.getBounds().toUrlValue()
+        }
+        if ($("#autocomplete").val().length > 0) {
+          payload.movie_title = $("#autocomplete").val()
+        }
+        var request = $.ajax({
+          url: SFMOVIES_API_ENDPOINT+"locations", 
+          dataType: "jsonp",
+          data: payload,
+          success: function(data) {            
+            // Add new markers to the map
+            $.each(data, function(i, location) {
+              var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(location.latitude, location.longitude),
+                map: map
+              });
+              newMarkers.push(marker)
+              
+              google.maps.event.addListener(marker, 'click', function() {
+                $.ajax({
+                  url: SFMOVIES_API_ENDPOINT+"location_detail", 
+                  dataType: "jsonp",
+                  data: {location_id: location.location_id},
+                  success: function(data) {
+                    var contentString = ''
+                    $.each(data, function(key, value){
+                      if (value != null){
+                        contentString += '<dt>'+key+'</dt><dd>'+value+'</dd>'
+                      }
+                    })
+                    contentString = '<div id="content">'+
+                      '<div id="siteNotice">'+
+                      '</div>'+
+                      '<h1 id="firstHeading" class="firstHeading">'+
+                      data.Title+
+                      '</h1>'+
+                      '<div id="bodyContent">'+
+                      '<dl>'+
+                      contentString+
+                      '</dl>'+
+                      '</div>'+
+                      '</div>';
+                    infowindow.setContent(contentString);
+                    infowindow.open(map,marker);
+                  }
+                })
+              });
+            })
+            
+            // Delete all previous markers
+            $.each(markers, function(i, marker) {
+              marker.setMap(null)
+            })
+            for (var i = 0; i < markers.length; i++) {
+              markers[i].setMap(null);
+            }
+            markers = newMarkers;
+            newMarkers = [];
+          }
+        });
+        request.fail(function( jqXHR, textStatus ) {
+          alert( "Request failed: " + textStatus );
+        });
+      }
+            
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </body>
+</html>
