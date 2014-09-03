@@ -2,6 +2,8 @@
 UberFarmer's application for the [Uber Coding Challenge](https://github.com/uber/coding-challenge-tools). 
 
 Project: **SF Movies**    (this may be obvious...)
+
+Check out the example front-end in action at http://uberfarmer.github.io/SFMovies/
 ## Usage
 
 Before you start, set these two environment variables: `DJANGO_SFMOVIES_SECRET_KEY` and `GOOGLE_API_KEY`. Use Django to generate you a new random secret key, and use your own Google API Key.
