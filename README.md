@@ -75,7 +75,7 @@ Primarily back-end. (Although I also created a reasonable but not super-polished
 *Note: Prior to this project, I have had almost no experience with web development. While I tried to choose technologies that would let me accomplish the job, I leaned toward widely-adopted technologies that I felt I should have experience with.*
 
 ######Back-end:
-* *[Python](https://www.python.org/)*: I chose Python because I was proficient with it and wanted to use Django as my web framework.
+* *[Python 3.4](https://www.python.org/)*: I chose Python because I was proficient with it and wanted to use Django as my web framework. I prefer Python 3 when I don't have to care about backwards-compatibility (though I didn't end up using very many Python 3 features).
   * Previous experience: I was already fluent in Python before this project.
 * *[Django](https://www.djangoproject.com/)*: I chose Django as my back-end web framework because it was well-developed, well-documented, and widely used. In addition, it was recommended by one of my friends and it has a built-in testing framework. Lastly, I wanted to learn it anyway. I knew from the start there was a chance it would be more complicated and heavy than was necessary. 
   * Previous experience: None (no experience with any web framework)
@@ -87,8 +87,10 @@ Primarily back-end. (Although I also created a reasonable but not super-polished
   * Previous experience: None
 * *[SFData SODA API](https://data.sfgov.org/)*: I chose to collect the data through their JSON web API so it would be easy to update my database if SFData's movies database was updated.
   * Previous experience: None
-* [Amazon AWS](aws.amazon.com): I chose this for my back-end hosting because I was sure it would be sufficient and I wanted experience using it. 
+* *[Amazon AWS](aws.amazon.com)*: I chose this for my back-end hosting because I was sure it would be sufficient and I wanted experience using it. 
   * Previous experience: None
+* *Apache HTTP Server*: Seemed like a common server choice with Django.
+  * Previous experience: None 
 
 ######Front-end:
 * *HTML/Javascript/CSS*: The only choice for modern web development. As I was planning to make a bare-bones front-end experience (and I wanted more experience with these technologies) I wrote these straight (using some snippets from the web) instead of using a front-end framework.
