@@ -1,12 +1,12 @@
 #SFMovies
 UberFarmer's application for the [Uber Coding Challenge](https://github.com/uber/coding-challenge-tools). 
 
-Project: **SF Movies** (may be obvious based on the repo title...)
+Project: **SF Movies**    (this may be obvious...)
 ## Usage
 
-To run the back-end service, two environment variables must be set: `DJANGO_SFMOVIES_SECRET_KEY` and `GOOGLE_API_KEY`. Use Django to generate you a new random secret key, and use your own Google API Key.
+Before you start, set these two environment variables: `DJANGO_SFMOVIES_SECRET_KEY` and `GOOGLE_API_KEY`. Use Django to generate you a new random secret key, and use your own Google API Key.
 
-Get your database into shape with the command `python manage.py syncdb` and then run the webserver locally using the command `python manage.py runserver`. Once it's up and running, you can point the front-end to the new SFMovies API Endpoint.
+Get your database into shape with the command `python manage.py syncdb` , run `sfmovies.updatedb.update_db_if_old()` to fill the database with data, and then run the webserver locally using the command `python manage.py runserver`. Once it's up and running, you can point the front-end to your new SFMovies API Endpoint.
 
 Enjoy exploring San Francisco's rich motion picture history with **SFMovies**!
 
